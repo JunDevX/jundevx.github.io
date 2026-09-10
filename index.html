@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JunDevX — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="https://github.com/JunDevX.png">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f12;
+      color: #e0e6ed;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Левая панель */
+    .left-panel {
+      width: 45%;
+      min-width: 320px;
+      background: #11161b;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .profile-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 2px solid #2ecc71;
+      box-shadow: 0 0 15px rgba(46, 204, 113, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .profile-avatar:hover {
+      transform: scale(1.08) rotate(5deg);
+    }
+
+    .profile-info h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .profile-info p {
+      color: #8b9bb4;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .profile-links {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .profile-links a {
+      color: #2ecc71;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.2s ease;
+    }
+
+    .profile-links a:hover {
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .section-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.1rem;
+      color: #2ecc71;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: fadeIn 1s ease-out forwards;
+    }
+
+    .repo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* Анимации карточек */
+    .repo-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 16px;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      text-decoration: none;
+      color: inherit;
+      opacity: 0;
+      animation: slideUp 0.5s ease-out forwards;
+    }
+
+    .repo-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(46, 204, 113, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .repo-name {
+      font-weight: 600;
+      color: #58a6ff;
+      font-size: 1rem;
+    }
+
+    .repo-desc {
+      font-size: 0.85rem;
+      color: #919eab;
+      margin: 8px 0 12px 0;
+      line-height: 1.4;
+    }
+
+    .repo-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 0.75rem;
+      color: #6c7a89;
+    }
+
+    .repo-meta span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Правая панель (Лесной фон) */
+    .right-panel {
+      width: 55%;
+      position: relative;
+      background: url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .right-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(11, 15, 18, 0.85), rgba(11, 15, 18, 0.6));
+      backdrop-filter: blur(5px);
+    }
+
+    .popular-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .popular-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.3rem;
+      color: #ffffff;
+      margin-bottom: 25px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: fadeIn 1.2s ease-out forwards;
+    }
+
+    .popular-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .popular-card {
+      background: rgba(17, 22, 27, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      opacity: 0;
+      animation: slideUp 0.5s ease-out forwards;
+    }
+
+    .popular-card:hover {
+      border-color: #2ecc71;
+      transform: translateX(8px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      background: rgba(22, 29, 36, 0.95);
+    }
+
+    .popular-info {
+      max-width: 75%;
+    }
+
+    .popular-info h3 {
+      font-size: 1.1rem;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .popular-info p {
+      font-size: 0.85rem;
+      color: #a0aec0;
+    }
+
+    .popular-action a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      background: #2ecc71;
+      color: #0b0f12;
+      border-radius: 50%;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
+    }
+
+    .popular-card:hover .popular-action a {
+      background: #ffffff;
+      color: #0b0f12;
+      transform: scale(1.15) rotate(-10deg);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+    }
+
+    /* Эффект Загрузки (Skeleton Loader) */
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: 8px;
+    }
+
+    .skeleton-card {
+      height: 90px;
+      margin-bottom: 15px;
+    }
+
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .state-message {
+      padding: 20px;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #8b9bb4;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .state-message.error {
+      border-color: rgba(231, 76, 60, 0.4);
+      color: #e6a0a0;
+    }
+
+    .state-message i {
+      display: block;
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      color: inherit;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Кастомный скроллбар */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        flex-direction: column;
+      }
+      .left-panel, .right-panel {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Левая панель -->
+  <div class="left-panel">
+    <div class="profile-header">
+      <img id="avatar" class="profile-avatar" src="https://github.com/JunDevX.png" alt="JunDevX Avatar">
+      <div class="profile-info">
+        <h1 id="username">JunDevX</h1>
+        <p id="bio">Developer Portfolio</p>
+        <div class="profile-links">
+          <a href="https://github.com/JunDevX" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <i class="fas fa-clock"></i> Последние обновленные
+    </div>
+
+    <div id="recent-repos" class="repo-list">
+      <!-- Скелетоны при загрузке -->
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+    </div>
+  </div>
+
+  <!-- Правая панель с фоном леса -->
+  <div class="right-panel">
+    <div class="popular-container">
+      <div class="popular-title">
+        <i class="fas fa-star" style="color: #f1c40f;"></i> Избранное (starred)
+      </div>
+      <div id="popular-repos" class="popular-grid">
+        <!-- Скелетоны при загрузке -->
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const USERNAME = 'JunDevX';
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str ?? '';
+      return div.innerHTML;
+    }
+
+    function showState(containerId, { icon, text, isError }) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = `
+        <div class="state-message ${isError ? 'error' : ''}">
+          <i class="fas ${icon}"></i>
+          ${escapeHtml(text)}
+        </div>
+      `;
+    }
+
+    // Небольшой помощник для обращений к GitHub API с проверкой rate-limit
+    async function githubFetch(url) {
+      const res = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+
+      if (res.status === 403 || res.status === 429) {
+        const remaining = res.headers.get('x-ratelimit-remaining');
+        if (remaining === '0') {
+          throw new Error('RATE_LIMIT');
+        }
+        throw new Error('FORBIDDEN');
+      }
+
+      if (res.status === 404) {
+        throw new Error('NOT_FOUND');
+      }
+
+      if (!res.ok) {
+        throw new Error(`HTTP_${res.status}`);
+      }
+
+      return res.json();
+    }
+
+    async function loadProfile() {
+      try {
+        const userData = await githubFetch(`https://api.github.com/users/${USERNAME}`);
+        if (userData.bio) document.getElementById('bio').textContent = userData.bio;
+        if (userData.avatar_url) document.getElementById('avatar').src = userData.avatar_url;
+      } catch (err) {
+        console.warn('Не удалось загрузить профиль GitHub:', err.message);
+      }
+    }
+
+    // Собственные репозитории, отсортированные по дате последнего обновления
+    async function loadRecentRepos() {
+      try {
+        const repos = await githubFetch(
+          `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated&direction=desc`
+        );
+
+        if (!Array.isArray(repos) || repos.length === 0) {
+          showState('recent-repos', { icon: 'fa-folder-open', text: 'Публичных репозиториев пока нет.' });
+          return;
+        }
+
+        renderRecentRepos(repos.slice(0, 6));
+      } catch (err) {
+        handleLoadError('recent-repos', err);
+      }
+    }
+
+    // Репозитории, которые пользователь "залайкал" (starred) на GitHub
+    async function loadStarredRepos() {
+      try {
+        const repos = await githubFetch(
+          `https://api.github.com/users/${USERNAME}/starred?per_page=5&sort=created&direction=desc`
+        );
+
+        if (!Array.isArray(repos) || repos.length === 0) {
+          showState('popular-repos', { icon: 'fa-star', text: 'Нет звёздных (starred) репозиториев.' });
+          return;
+        }
+
+        renderPopularRepos(repos.slice(0, 5));
+      } catch (err) {
+        handleLoadError('popular-repos', err);
+      }
+    }
+
+    function handleLoadError(containerId, err) {
+      const messages = {
+        RATE_LIMIT: 'Превышен лимит запросов к GitHub API. Попробуйте обновить страницу позже.',
+        FORBIDDEN: 'GitHub API отклонил запрос (доступ ограничен).',
+        NOT_FOUND: `Пользователь ${USERNAME} не найден на GitHub.`
+      };
+      const text = messages[err.message] || 'Не удалось загрузить данные с GitHub. Проверьте подключение к интернету.';
+      console.error('Ошибка загрузки GitHub данных:', err);
+      showState(containerId, { icon: 'fa-triangle-exclamation', text, isError: true });
+    }
+
+    function renderRecentRepos(repos) {
+      const container = document.getElementById('recent-repos');
+      container.innerHTML = repos.map((repo, index) => `
+        <a href="${repo.html_url}" target="_blank" class="repo-card" style="animation-delay: ${index * 0.1}s">
+          <div class="repo-header">
+            <span class="repo-name">${escapeHtml(repo.name)}</span>
+          </div>
+          <p class="repo-desc">${escapeHtml(repo.description) || 'Описание проекта отсутствует'}</p>
+          <div class="repo-meta">
+            ${repo.language ? `<span><i class="fas fa-code"></i> ${escapeHtml(repo.language)}</span>` : ''}
+            <span><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
+            <span><i class="fas fa-history"></i> ${new Date(repo.updated_at).toLocaleDateString('ru-RU')}</span>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    function renderPopularRepos(repos) {
+      const container = document.getElementById('popular-repos');
+      container.innerHTML = repos.map((repo, index) => `
+        <div class="popular-card" style="animation-delay: ${index * 0.15}s">
+          <div class="popular-info">
+            <h3>${escapeHtml(repo.full_name || repo.name)}</h3>
+            <p>${escapeHtml(repo.description) || 'Описание проекта отсутствует'}</p>
+          </div>
+          <div class="popular-action">
+            <a href="${repo.html_url}" target="_blank" title="Перейти на страницу проекта">
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    loadProfile();
+    loadRecentRepos();
+    loadStarredRepos();
+  </script>
+</body>
+</html>
